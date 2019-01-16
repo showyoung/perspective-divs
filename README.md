@@ -35,7 +35,7 @@ expmple:
 </script>
 
 More:
-1.we can add parameters for each child node.
+we can add parameters for each child node.
 <div class="bg" data-pscale="1.5">
 data-pscale="1.5" means this div will be scaled to 1.5 size.
 <main data-penable="false">
