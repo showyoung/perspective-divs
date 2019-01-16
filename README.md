@@ -8,7 +8,7 @@ expmple:
 2.add some child nodes.
 expmple:
 <div id="whatever">
-  <div class=""bg><img src="img/pictures/background_01.jpg" /></div>
+  <div class="bg"><img src="img/pictures/background_01.jpg" /></div>
   <nav>
     <ul>
       <li>title</li>
@@ -35,3 +35,8 @@ expmple:
 </script>
 
 More:
+1.we can add parameters for each child node.
+<div class="bg" data-pscale="1.5">
+data-pscale="1.5" means this div will be scaled to 1.5 size.
+<main data-penable="false">
+data-penable="false" means this div do not add perspective style.
