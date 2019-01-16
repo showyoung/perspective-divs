@@ -23,18 +23,30 @@
             var initBeta = 0;
             var initGamma = 0;
             var numberOfChildren = $(this).children().length;
+            var enalbeOfChildren = [];
             var percentOfChildren = [];
             var distSignOfChildren = [];
+            var scaleOfChildren = [];
             for(let i = 0; i < numberOfChildren; i ++){
                 $($(container).children().get(i)).css({
                     "transform-origin": "50vw 50vh"
                 });
+                if($($(container).children().get(i)).data("penable") != undefined){
+                    enalbeOfChildren[i] = $($(container).children().get(i)).data("penable");
+                }else{
+                    enalbeOfChildren[i] = true;
+                };
+                if($($(container).children().get(i)).data("pscale") != undefined){
+                    scaleOfChildren[i] = $($(container).children().get(i)).data("pscale");
+                }else{
+                    scaleOfChildren[i] = 1;
+                };
                 percentOfChildren[i] = (i - focus) * digiReverse;
                 if(percentOfChildren[i] != 0){
                     distSignOfChildren[i] = percentOfChildren[i] / Math.abs(percentOfChildren[i]) * digiReverse;
                 }else{
                     distSignOfChildren[i] = 1;
-                }
+                };
             };
             var maxPostion = Math.max(Math.abs(percentOfChildren[0]),Math.abs(percentOfChildren[numberOfChildren - 1]));
             for(let i = 0; i < numberOfChildren; i ++){
@@ -58,27 +70,29 @@
                         initGamma = gamma;
                     };
                     for(let i = 0; i < numberOfChildren; i ++){
-                        if(i == focus){
-                            $($(container).children().get(i)).css({
-                                "transform":
-                                    "rotateX(" + Math.min(Math.max((-1) * settings.minDegree, (-1) * (beta - initBeta) * percentOfChildren[i+1] / numberOfChildren), settings.minDegree) + "deg) " + 
-                                    "rotateY(" + Math.min(Math.max((-1) * settings.minDegree, (gamma - initGamma) * percentOfChildren[i+1] / numberOfChildren), settings.minDegree) + "deg) " +
-                                    "translateX(" + Math.min(Math.max((-1) * settings.minDistance, (gamma - initGamma) * percentOfChildren[i+1] / numberOfChildren), settings.minDistance) + "px) " +
-                                    "translateY(" + Math.min(Math.max((-1) * settings.minDistance, (beta - initBeta) * percentOfChildren[i+1] / numberOfChildren), settings.minDistance) +"px) " +
-                                    "translateZ(0)" +
-                                    "scale(1, 1)"
-                            });
-                        }else{
-                            $($(container).children().get(i)).css({
-                                "transform":
-                                "rotateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (-1) * (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
-                                "rotateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
-                                "translateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) + "px) " +
-                                "translateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) +"px) " +
-                                "translateZ(" + percentOfChildren[i] + "px)" + 
-                                "scale(1, 1)"
-                            });
-                        };
+                        if(enalbeOfChildren[i]){
+                            if(i == focus){
+                                $($(container).children().get(i)).css({
+                                    "transform":
+                                        "rotateX(" + Math.min(Math.max((-1) * settings.minDegree, (-1) * (beta - initBeta) * percentOfChildren[i+1] / numberOfChildren), settings.minDegree) + "deg) " + 
+                                        "rotateY(" + Math.min(Math.max((-1) * settings.minDegree, (gamma - initGamma) * percentOfChildren[i+1] / numberOfChildren), settings.minDegree) + "deg) " +
+                                        "translateX(" + Math.min(Math.max((-1) * settings.minDistance, (gamma - initGamma) * percentOfChildren[i+1] / numberOfChildren), settings.minDistance) + "px) " +
+                                        "translateY(" + Math.min(Math.max((-1) * settings.minDistance, (beta - initBeta) * percentOfChildren[i+1] / numberOfChildren), settings.minDistance) +"px) " +
+                                        "translateZ(0)" +
+                                        "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
+                                });
+                            }else{
+                                $($(container).children().get(i)).css({
+                                    "transform":
+                                    "rotateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (-1) * (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
+                                    "rotateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
+                                    "translateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) + "px) " +
+                                    "translateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) +"px) " +
+                                    "translateZ(" + percentOfChildren[i] + "px)" + 
+                                    "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
+                                });
+                            };
+                        }
                     };
                 };
             }, false);
@@ -88,26 +102,28 @@
                     var offsetX = event.pageX - centerX;
                     var offsetY = event.pageY - centerY;
                     for(let i = 0; i < numberOfChildren; i ++){
-                        if(i == focus){
-                            $($(container).children().get(i)).css({
-                                "transform":
-                                "rotateX(" + offsetY / centerY * settings.minDegree  + "deg) " +
-                                "rotateY(" + (-1) * offsetX / centerX * settings.minDegree + "deg) " +
-                                "translateX(" + offsetX / centerX * settings.minDistance + "px) " +
-                                "translateY(" + offsetY / centerY * settings.minDistance + "px) " +
-                                "translateZ(0)" +
-                                "scale(1, 1)"
-                            });
-                        }else{
-                            $($(container).children().get(i)).css({
-                                "transform":
-                                "rotateX(" + offsetY / centerY * settings.maxDegree * percentOfChildren[i] + "deg) " +
-                                "rotateY(" + (-1) * offsetX / centerX * settings.maxDegree * percentOfChildren[i] + "deg) " +
-                                "translateX(" + offsetX / centerX * settings.maxDistance * percentOfChildren[i]  + "px) " +
-                                "translateY(" + offsetY / centerY * settings.maxDistance * percentOfChildren[i] + "px) " +
-                                "translateZ(" + percentOfChildren[i] + "px)" + 
-                                "scale(1, 1)"
-                            });
+                        if(enalbeOfChildren[i]){
+                            if(i == focus){
+                                $($(container).children().get(i)).css({
+                                    "transform":
+                                    "rotateX(" + offsetY / centerY * settings.minDegree  + "deg) " +
+                                    "rotateY(" + (-1) * offsetX / centerX * settings.minDegree + "deg) " +
+                                    "translateX(" + offsetX / centerX * settings.minDistance + "px) " +
+                                    "translateY(" + offsetY / centerY * settings.minDistance + "px) " +
+                                    "translateZ(0)" +
+                                    "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
+                                });
+                            }else{
+                                $($(container).children().get(i)).css({
+                                    "transform":
+                                    "rotateX(" + offsetY / centerY * settings.maxDegree * percentOfChildren[i] + "deg) " +
+                                    "rotateY(" + (-1) * offsetX / centerX * settings.maxDegree * percentOfChildren[i] + "deg) " +
+                                    "translateX(" + offsetX / centerX * settings.maxDistance * percentOfChildren[i]  + "px) " +
+                                    "translateY(" + offsetY / centerY * settings.maxDistance * percentOfChildren[i] + "px) " +
+                                    "translateZ(" + percentOfChildren[i] + "px)" + 
+                                    "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
+                                });
+                            };
                         };
                     };
                 });
