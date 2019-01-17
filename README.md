@@ -35,8 +35,22 @@ expmple:
 </script>
 
 More:
-we can add parameters for each child node.
+1.we can add parameters for each child node.
 <div class="bg" data-pscale="1.5">
 data-pscale="1.5" means this div will be scaled to 1.5 size.
 <main data-penable="false">
 data-penable="false" means this div do not add perspective style.
+
+2.we can add parameters on script.
+$("#whatever").perspective({
+  focus: 1,
+  maxDegree: 0,
+  minDegree: 0,
+  maxDistance: 9,
+  minDistance: 3,
+  reverse: false
+});
+focus means which div we need to set the min degree and distance.
+maxDegree means the max degree div can rotate.
+maxDistance means the max distance div can move.
+reverse means reverse the rotate and the translate.
