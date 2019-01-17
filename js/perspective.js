@@ -22,6 +22,11 @@
             var initAlpha = 0;
             var initBeta = 0;
             var initGamma = 0;
+            var alpha = 0;
+            var beta = 0;
+            var gamma = 0;
+            var landscape = false;
+            var newOrientation = false;
             var numberOfChildren = $(this).children().length;
             var enalbeOfChildren = [];
             var percentOfChildren = [];
@@ -58,17 +63,39 @@
                 centerX = width / 2;
                 centerY = height / 2;
             });
+            
             if(window.DeviceOrientationEvent){
-            window.addEventListener('deviceorientation', function(event){
+            window.addEventListener("orientationchange", function(){
+                if(window.orientation == 90 || window.orientation == -90){
+                    landscape = true;
+                }else{
+                    landscape = false;
+                };
+                newOrientation = true;
+            }, false);
+            window.addEventListener("deviceorientation", function(event){
                 if(event.alpha || event.beta || event.gamma){
-                    var alpha = event.alpha;
-                    var beta = event.beta;
-                    var gamma = event.gamma;
+                    if(!landscape){
+                        alpha = event.alpha;
+                        beta = event.beta;
+                        gamma = event.gamma;
+                    }else{
+                        alpha = event.alpha;
+                        beta = event.gamma;
+                        gamma = event.beta;
+                    }
                     if(initAlpha == 0 && initBeta == 0 && initGamma == 0){
                         initAlpha = alpha;
                         initBeta = beta;
                         initGamma = gamma;
                     };
+                    if(newOrientation == true){
+                        initAlpha = alpha;
+                        initBeta = beta;
+                        initGamma = gamma;
+                        newOrientation = false;
+                    }
+                    document.getElementById("helper").innerHTML = (gamma - initGamma) + ", " + (beta - initBeta);
                     for(let i = 0; i < numberOfChildren; i ++){
                         if(enalbeOfChildren[i]){
                             if(i == focus){
@@ -88,7 +115,7 @@
                                     "rotateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
                                     "translateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) + "px) " +
                                     "translateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) +"px) " +
-                                    "translateZ(" + percentOfChildren[i] + "px)" + 
+                                    "translateZ(" + percentOfChildren[i] * digiReverse + "px)" + 
                                     "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
                                 });
                             };
@@ -120,7 +147,7 @@
                                     "rotateY(" + (-1) * offsetX / centerX * settings.maxDegree * percentOfChildren[i] + "deg) " +
                                     "translateX(" + offsetX / centerX * settings.maxDistance * percentOfChildren[i]  + "px) " +
                                     "translateY(" + offsetY / centerY * settings.maxDistance * percentOfChildren[i] + "px) " +
-                                    "translateZ(" + percentOfChildren[i] + "px)" + 
+                                    "translateZ(" + percentOfChildren[i] * digiReverse + "px)" + 
                                     "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
                                 });
                             };
