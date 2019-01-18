@@ -19,6 +19,7 @@
             var height = $(window).height();
             var centerX = width / 2;
             var centerY = height / 2;
+            var isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
             var initAlpha = 0;
             var initBeta = 0;
             var initGamma = 0;
@@ -65,66 +66,65 @@
             });
             
             if(window.DeviceOrientationEvent){
-            window.addEventListener("orientationchange", function(){
-                if(window.orientation == 90 || window.orientation == -90){
-                    landscape = true;
-                }else{
-                    landscape = false;
-                };
-                newOrientation = true;
-            }, false);
-            window.addEventListener("deviceorientation", function(event){
-                if(event.alpha || event.beta || event.gamma){
-                    if(!landscape){
-                        alpha = event.alpha;
-                        beta = event.beta;
-                        gamma = event.gamma;
+                window.addEventListener("orientationchange", function(){
+                    if(window.orientation == 90 || window.orientation == -90){
+                        landscape = true;
                     }else{
-                        alpha = event.alpha;
-                        beta = event.gamma;
-                        gamma = event.beta;
-                    }
-                    if(initAlpha == 0 && initBeta == 0 && initGamma == 0){
-                        initAlpha = alpha;
-                        initBeta = beta;
-                        initGamma = gamma;
+                        landscape = false;
                     };
-                    if(newOrientation == true){
-                        initAlpha = alpha;
-                        initBeta = beta;
-                        initGamma = gamma;
-                        newOrientation = false;
-                    }
-                    document.getElementById("helper").innerHTML = (gamma - initGamma) + ", " + (beta - initBeta);
-                    for(let i = 0; i < numberOfChildren; i ++){
-                        if(enalbeOfChildren[i]){
-                            if(i == focus){
-                                $($(container).children().get(i)).css({
-                                    "transform":
-                                        "rotateX(" + Math.min(Math.max((-1) * settings.minDegree, (-1) * (beta - initBeta) * percentOfChildren[i+1] / numberOfChildren), settings.minDegree) + "deg) " + 
-                                        "rotateY(" + Math.min(Math.max((-1) * settings.minDegree, (gamma - initGamma) * percentOfChildren[i+1] / numberOfChildren), settings.minDegree) + "deg) " +
-                                        "translateX(" + Math.min(Math.max((-1) * settings.minDistance, (gamma - initGamma) * percentOfChildren[i+1] / numberOfChildren), settings.minDistance) + "px) " +
-                                        "translateY(" + Math.min(Math.max((-1) * settings.minDistance, (beta - initBeta) * percentOfChildren[i+1] / numberOfChildren), settings.minDistance) +"px) " +
-                                        "translateZ(0)" +
-                                        "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
-                                });
-                            }else{
-                                $($(container).children().get(i)).css({
-                                    "transform":
-                                    "rotateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (-1) * (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
-                                    "rotateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
-                                    "translateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) + "px) " +
-                                    "translateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) +"px) " +
-                                    "translateZ(" + percentOfChildren[i] * digiReverse + "px)" + 
-                                    "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
-                                });
-                            };
+                    newOrientation = true;
+                }, false);
+                window.addEventListener("deviceorientation", function(event){
+                    if(event.alpha || event.beta || event.gamma){
+                        if(!landscape){
+                            alpha = event.alpha;
+                            beta = event.beta;
+                            gamma = event.gamma;
+                        }else{
+                            alpha = event.alpha;
+                            beta = event.gamma;
+                            gamma = event.beta;
                         }
+                        if(initAlpha == 0 && initBeta == 0 && initGamma == 0){
+                            initAlpha = alpha;
+                            initBeta = beta;
+                            initGamma = gamma;
+                        };
+                        if(newOrientation == true){
+                            initAlpha = alpha;
+                            initBeta = beta;
+                            initGamma = gamma;
+                            newOrientation = false;
+                        };
+                        for(let i = 0; i < numberOfChildren; i ++){
+                            if(enalbeOfChildren[i]){
+                                if(i == focus){
+                                    $($(container).children().get(i)).css({
+                                        "transform":
+                                            "rotateX(" + Math.min(Math.max((-1) * settings.minDegree, (-1) * (beta - initBeta) * percentOfChildren[i+1] / numberOfChildren), settings.minDegree) + "deg) " + 
+                                            "rotateY(" + Math.min(Math.max((-1) * settings.minDegree, (gamma - initGamma) * percentOfChildren[i+1] / numberOfChildren), settings.minDegree) + "deg) " +
+                                            "translateX(" + Math.min(Math.max((-1) * settings.minDistance, (gamma - initGamma) * percentOfChildren[i+1] / numberOfChildren), settings.minDistance) + "px) " +
+                                            "translateY(" + Math.min(Math.max((-1) * settings.minDistance, (beta - initBeta) * percentOfChildren[i+1] / numberOfChildren), settings.minDistance) +"px) " +
+                                            "translateZ(0)" +
+                                            "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
+                                    });
+                                }else{
+                                    $($(container).children().get(i)).css({
+                                        "transform":
+                                        "rotateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (-1) * (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
+                                        "rotateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDegree, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDegree) + "deg) " +
+                                        "translateX(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (gamma - initGamma) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) + "px) " +
+                                        "translateY(" + Math.min(Math.max((-1) * Math.abs(percentOfChildren[i]) * settings.maxDistance, (beta - initBeta) * percentOfChildren[i]), Math.abs(percentOfChildren[i]) * settings.maxDistance) +"px) " +
+                                        "translateZ(" + percentOfChildren[i] * digiReverse + "px)" + 
+                                        "scale(" + scaleOfChildren[i] + ", " + scaleOfChildren[i] + ")"
+                                    });
+                                };
+                            };
+                        };
                     };
-                };
-            }, false);
+                }, false);
             };
-            if(initBeta == 0 && initGamma == 0){
+            if(!isTouch){
                 $("body").on("mousemove", function(event){
                     var offsetX = event.pageX - centerX;
                     var offsetY = event.pageY - centerY;
