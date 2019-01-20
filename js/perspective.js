@@ -64,7 +64,6 @@
                 centerX = width / 2;
                 centerY = height / 2;
             });
-            
             if(window.DeviceOrientationEvent){
                 window.addEventListener("orientationchange", function(){
                     if(window.orientation == 90 || window.orientation == -90){
